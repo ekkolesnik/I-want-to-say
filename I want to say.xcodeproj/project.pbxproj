@@ -72,6 +72,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		85B2DBDD26764AC600A14C7B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				85D5B7E02676483C000C0A12 /* ContentView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		85B2DBDE26764AD700A14C7B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		85D5B7D22676483C000C0A12 = {
 			isa = PBXGroup;
 			children = (
@@ -95,8 +110,9 @@
 		85D5B7DD2676483C000C0A12 /* I want to say */ = {
 			isa = PBXGroup;
 			children = (
+				85B2DBDE26764AD700A14C7B /* Model */,
+				85B2DBDD26764AC600A14C7B /* Views */,
 				85D5B7DE2676483C000C0A12 /* I_want_to_sayApp.swift */,
-				85D5B7E02676483C000C0A12 /* ContentView.swift */,
 				85D5B7E22676483E000C0A12 /* Assets.xcassets */,
 				85D5B7E72676483E000C0A12 /* Info.plist */,
 				85D5B7E42676483E000C0A12 /* Preview Content */,
@@ -430,7 +446,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "EK.I-want-to-say";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -452,7 +468,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "EK.I-want-to-say";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
