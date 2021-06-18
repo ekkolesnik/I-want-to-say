@@ -11,7 +11,7 @@ import SwiftUI
 struct I_want_to_sayApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            CategorySelectionView()
         }
     }
 }
