@@ -9,14 +9,11 @@ import SwiftUI
 
 struct WantCategoryView: View {
     
+    @StateObject var vm = FileManagerViewModel()
+    
     @Environment(\.presentationMode) var presentationMode
     
-    var cardArray = [
-        WantCategoryCard(title: "Гулять", image: "1"),
-        WantCategoryCard(title: "Купаться", image: "2"),
-        WantCategoryCard(title: "Есть", image: "3"),
-        WantCategoryCard(title: "Играть", image: "4")
-    ]
+    @State private var cardArray = [WantCategoryCard]()
     
     var body: some View {
         ZStack {
@@ -26,6 +23,7 @@ struct WantCategoryView: View {
             VStack {
                 HStack {
                     Button(action: {
+                        cardArray.removeAll()
                         presentationMode.wrappedValue.dismiss()
                     }, label: {
                         Image(systemName: "chevron.left")
@@ -39,6 +37,9 @@ struct WantCategoryView: View {
                             Image(systemName: "gearshape")
                                 .foregroundColor(.gray)
                                 .font(.title)
+                        })
+                        .onAppear(perform: {
+                            cardArray.removeAll()
                         })
                 }
                 .padding()
@@ -65,17 +66,7 @@ struct WantCategoryView: View {
                         GridItem(.fixed(110))
                     ], alignment: .center, spacing: nil, content: {
                         ForEach(cardArray, id: \.self) { card in
-                            VStack {
-                                Image(card.image)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 100, height: 100)
-                                    .cornerRadius(5)
-                                
-                                Text(card.title)
-                                    .foregroundColor(.white)
-                            }
-                            .padding(5)
+                            BodyView(card: card)
                         }
                         .background(Color.white.opacity(0.3))
                         .cornerRadius(10)
@@ -87,7 +78,49 @@ struct WantCategoryView: View {
                 
                 Spacer()
             }
-            .navigationBarHidden(true)
+            
+        }
+        .navigationBarHidden(true)
+        .onAppear {
+            checkArray()
+        }
+    }
+    
+    func checkArray() {
+        
+        let dataCards = UserDefaults.standard.object(forKey: "wantArray")
+        
+        if dataCards != nil {
+            print("111")
+            if let savedCardData = UserDefaults.standard.object(forKey: "wantArray") as? Data {
+                if let savedUser = try? JSONDecoder().decode([WantCategoryCard].self, from: savedCardData) {
+                    print(cardArray)
+                    print(savedUser)
+                    for i in savedUser {
+                        cardArray.append(i)
+                    }
+                }
+            }
+        } else {
+            print("222")
+            let importArray = [
+                WantCategoryCard(id: UUID(), title: "Гулять", image: "1"),
+                WantCategoryCard(id: UUID(), title: "Купаться", image: "2"),
+                WantCategoryCard(id: UUID(), title: "Есть", image: "3"),
+                WantCategoryCard(id: UUID(), title: "Играть", image: "4")
+            ]
+            
+            print(importArray)
+            
+            for i in importArray {
+                cardArray.append(i)
+                let image = UIImage(named: i.image)
+                vm.saveImage(image: image, name: i.title)
+            }
+            
+            if let encodeCard = try? JSONEncoder().encode(importArray) {
+                UserDefaults.standard.set(encodeCard, forKey: "wantArray")
+            }
         }
     }
 }
@@ -95,5 +128,31 @@ struct WantCategoryView: View {
 struct WantCategoryView_Previews: PreviewProvider {
     static var previews: some View {
         WantCategoryView()
+    }
+}
+
+struct BodyView: View {
+    
+    @StateObject var vm = FileManagerViewModel()
+    
+    var card: WantCategoryCard
+    
+    var body: some View {
+        VStack {
+            if let image = vm.image {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 100, height: 100)
+                    .cornerRadius(5)
+            }
+            
+            Text(card.title)
+                .foregroundColor(.white)
+        }
+        .padding(5)
+        .onAppear(perform: {
+            vm.getImafeFromFileManager(name: card.title)
+        })
     }
 }

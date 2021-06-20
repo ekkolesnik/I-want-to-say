@@ -7,7 +7,88 @@
 
 import SwiftUI
 
+class LocalFileManager {
+    
+    static let instance = LocalFileManager()
+    
+    func saveImage(image: UIImage, name: String) {
+        
+        guard let data = image.jpegData(compressionQuality: 1.0),
+            let path = getPathForImage(name: name) else {
+            print("Error getting data")
+            return
+        }
+        
+        do {
+            try data.write(to: path)
+            print("Success saving!")
+        } catch let error {
+            print(error.localizedDescription)
+        }
+        
+        let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        
+        print(directory)
+    }
+    
+    func getImage(name: String) -> UIImage? {
+        guard let path = getPathForImage(name: name)?.path,
+              FileManager.default.fileExists(atPath: path) else {
+            print("Error getting path")
+            return nil
+        }
+        return UIImage(contentsOfFile: path)
+    }
+    
+    func getPathForImage(name: String) -> URL? {
+        guard let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("\(name).jpg") else {
+            print("Error getting data")
+            return nil
+        }
+        return path
+    }
+}
+
+class FileManagerViewModel: ObservableObject {
+    
+    @Published var image: UIImage? = nil
+    let manager = LocalFileManager.instance
+    
+    func saveImage(image: UIImage?, name: String) {
+        guard let image = image else { return }
+        manager.saveImage(image: image, name: name)
+        
+        //Получаем массив из UserDefaults и записываем в него новое значение, после чего записываем новый массив в UserDefaults
+        var cardArray = [WantCategoryCard]()
+        //Получение
+        if let savedCardData = UserDefaults.standard.object(forKey: "wantArray") as? Data {
+            if let savedCard = try? JSONDecoder().decode([WantCategoryCard].self, from: savedCardData) {
+                for i in savedCard {
+                    cardArray.append(i)
+                }
+
+                //Запись нового значения в массив
+                let newCard = WantCategoryCard(id: UUID(), title: name, image: name)
+                cardArray.append(newCard)
+                
+                //Запись обнавлённого массива в UserDefaults
+                if let encodeCard = try? JSONEncoder().encode(cardArray) {
+                    UserDefaults.standard.set(encodeCard, forKey: "wantArray")
+                }
+                
+                print(cardArray)
+            }
+        }
+    }
+    
+    func getImafeFromFileManager(name: String) {
+        image = manager.getImage(name: name)
+    }
+}
+
 struct AddCardView: View {
+    
+    @StateObject var vm = FileManagerViewModel()
     
     @State private var image: Image?
     @State private var title = ""
@@ -16,6 +97,8 @@ struct AddCardView: View {
     @State private var inputImage: UIImage?
     
     @Environment(\.presentationMode) var presentationMode
+    
+    let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
     
     var body: some View {
         ZStack {
@@ -39,7 +122,7 @@ struct AddCardView: View {
                     
                     CategoryTitleTextView(text: "Добавление")
                 }
-                .padding(.bottom, 20)
+                .padding()
                 
                 ZStack {
                     Color.white
@@ -85,7 +168,7 @@ struct AddCardView: View {
                     .padding(.bottom, 30)
                 
                 Button(action: {
-                    print("test")
+                    vm.saveImage(image: inputImage, name: title)
                 }, label: {
                     ZStack {
                         Color.white

@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct CategorySelectionView: View {
+    
+    let userDefaults = UserDefaults.standard
+    
     var body: some View {
         
         NavigationView {
@@ -32,6 +35,10 @@ struct CategorySelectionView: View {
                 }
                 
                 VStack {
+//                    CategoryTitleTextView(text: "Выберите \nкатегорию")
+//                        .multilineTextAlignment(.center)
+//                        .padding()
+                    
                     HStack {
                         NavigationLink(
                             destination: WantCategoryView(),
@@ -108,6 +115,7 @@ struct CategorySelectionView: View {
             }
             .navigationBarHidden(true)
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

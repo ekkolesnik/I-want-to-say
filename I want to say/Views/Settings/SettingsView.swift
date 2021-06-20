@@ -20,7 +20,7 @@ struct SettingsView: View {
                 ZStack {
                     HStack {
                         Button(action: {
-                            presentationMode.wrappedValue.dismiss()
+                                presentationMode.wrappedValue.dismiss()
                         }, label: {
                             Image(systemName: "chevron.left")
                                 .foregroundColor(.gray)

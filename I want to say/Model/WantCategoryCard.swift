@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct WantCategoryCard: Hashable, Identifiable {
+struct WantCategoryCard: Hashable, Identifiable, Codable {
     var id = UUID()
     let title: String
     let image: String
