@@ -1,19 +1,19 @@
 //
-//  SettingsWantCategoryView.swift
+//  SettingsFoodCategoryView.swift
 //  I want to say
 //
-//  Created by Evgeny Kolesnik on 15.06.2021.
+//  Created by Evgeny Kolesnik on 21.06.2021.
 //
 
 import SwiftUI
 
-struct SettingsWantCategoryView: View {
+struct SettingsFoodCategoryView: View {
     
     @Environment(\.presentationMode) var presentationMode
     
     @StateObject var vm = FileManagerViewModel()
     
-    @State private var cardArray = [WantCategoryCard]()
+    @State private var cardArray = [FoodCategoryCard]()
     
     init() {
         //прозрачный фон листинга
@@ -43,7 +43,7 @@ struct SettingsWantCategoryView: View {
                         Spacer()
                         
                         NavigationLink(
-                            destination: AddCardView(category: "want"),
+                            destination: AddCardView(category: "food"),
                             label: {
                                 Image(systemName: "plus")
                                     .foregroundColor(.gray)
@@ -64,7 +64,7 @@ struct SettingsWantCategoryView: View {
                         NavigationLink(
                             destination: EmptyView(),
                             label: {
-                                SettingsBodyView(card: card)
+                                SettingsFoodBodyView(card: card)
                                 
                             })
                     }
@@ -93,14 +93,14 @@ struct SettingsWantCategoryView: View {
         
         //запись нового массива после удаления элемента
         if let encodeCard = try? JSONEncoder().encode(cardArray) {
-            UserDefaults.standard.set(encodeCard, forKey: "wantArray")
+            UserDefaults.standard.set(encodeCard, forKey: "foodArray")
         }
     }
     
     //получаем массив из UserDefaults
     func getArray() {
-        if let savedCardData = UserDefaults.standard.object(forKey: "wantArray") as? Data {
-            if let savedCard = try? JSONDecoder().decode([WantCategoryCard].self, from: savedCardData) {
+        if let savedCardData = UserDefaults.standard.object(forKey: "foodArray") as? Data {
+            if let savedCard = try? JSONDecoder().decode([FoodCategoryCard].self, from: savedCardData) {
                 print(cardArray)
                 print(savedCard)
                 for i in savedCard {
@@ -111,11 +111,11 @@ struct SettingsWantCategoryView: View {
     }
 }
 
-struct SettingsBodyView: View {
+struct SettingsFoodBodyView: View {
     
     @StateObject var vm = FileManagerViewModel()
     
-    let card: WantCategoryCard
+    let card: FoodCategoryCard
     
     var body: some View {
         
@@ -151,10 +151,8 @@ struct SettingsBodyView: View {
     }
 }
 
-struct SettingsWantCategoryView_Previews: PreviewProvider {
+struct SettingsFoodCategoryView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsWantCategoryView()
+        SettingsFoodCategoryView()
     }
 }
-
-

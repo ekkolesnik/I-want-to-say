@@ -1,19 +1,19 @@
 //
-//  SettingsWantCategoryView.swift
+//  SettingsHoodCategoryView.swift
 //  I want to say
 //
-//  Created by Evgeny Kolesnik on 15.06.2021.
+//  Created by Evgeny Kolesnik on 22.06.2021.
 //
 
 import SwiftUI
 
-struct SettingsWantCategoryView: View {
+struct SettingsHoodCategoryView: View {
     
     @Environment(\.presentationMode) var presentationMode
     
     @StateObject var vm = FileManagerViewModel()
     
-    @State private var cardArray = [WantCategoryCard]()
+    @State private var cardArray = [HoodCategoryCard]()
     
     init() {
         //прозрачный фон листинга
@@ -43,7 +43,7 @@ struct SettingsWantCategoryView: View {
                         Spacer()
                         
                         NavigationLink(
-                            destination: AddCardView(category: "want"),
+                            destination: AddCardView(category: "hood"),
                             label: {
                                 Image(systemName: "plus")
                                     .foregroundColor(.gray)
@@ -55,7 +55,7 @@ struct SettingsWantCategoryView: View {
                     }
                     .padding(.horizontal, 16)
                     
-                    CategoryTitleTextView(text: "Хочу")
+                    CategoryTitleTextView(text: "Болит")
                 }
                 .padding()
                 
@@ -64,7 +64,7 @@ struct SettingsWantCategoryView: View {
                         NavigationLink(
                             destination: EmptyView(),
                             label: {
-                                SettingsBodyView(card: card)
+                                SettingsHoodBodyView(card: card)
                                 
                             })
                     }
@@ -93,14 +93,14 @@ struct SettingsWantCategoryView: View {
         
         //запись нового массива после удаления элемента
         if let encodeCard = try? JSONEncoder().encode(cardArray) {
-            UserDefaults.standard.set(encodeCard, forKey: "wantArray")
+            UserDefaults.standard.set(encodeCard, forKey: "hoodArray")
         }
     }
     
     //получаем массив из UserDefaults
     func getArray() {
-        if let savedCardData = UserDefaults.standard.object(forKey: "wantArray") as? Data {
-            if let savedCard = try? JSONDecoder().decode([WantCategoryCard].self, from: savedCardData) {
+        if let savedCardData = UserDefaults.standard.object(forKey: "hoodArray") as? Data {
+            if let savedCard = try? JSONDecoder().decode([HoodCategoryCard].self, from: savedCardData) {
                 print(cardArray)
                 print(savedCard)
                 for i in savedCard {
@@ -111,11 +111,11 @@ struct SettingsWantCategoryView: View {
     }
 }
 
-struct SettingsBodyView: View {
+struct SettingsHoodBodyView: View {
     
     @StateObject var vm = FileManagerViewModel()
     
-    let card: WantCategoryCard
+    let card: HoodCategoryCard
     
     var body: some View {
         
@@ -151,10 +151,8 @@ struct SettingsBodyView: View {
     }
 }
 
-struct SettingsWantCategoryView_Previews: PreviewProvider {
+struct SettingsHoodCategoryView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsWantCategoryView()
+        SettingsHoodCategoryView()
     }
 }
-
-

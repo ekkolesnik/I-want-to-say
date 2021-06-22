@@ -12,3 +12,15 @@ struct WantCategoryCard: Hashable, Identifiable, Codable {
     let title: String
     let image: String
 }
+
+struct FoodCategoryCard: Hashable, Identifiable, Codable {
+    var id = UUID()
+    let title: String
+    let image: String
+}
+
+struct HoodCategoryCard: Hashable, Identifiable, Codable {
+    var id = UUID()
+    let title: String
+    let image: String
+}

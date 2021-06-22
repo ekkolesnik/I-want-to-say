@@ -9,8 +9,6 @@ import SwiftUI
 
 struct CategorySelectionView: View {
     
-    let userDefaults = UserDefaults.standard
-    
     var body: some View {
         
         NavigationView {
@@ -19,26 +17,6 @@ struct CategorySelectionView: View {
                     .edgesIgnoringSafeArea(.all)
                 
                 VStack {
-                    HStack {
-                        Spacer()
-                        NavigationLink(
-                            destination: SettingsView(),
-                            label: {
-                                Image(systemName: "gearshape")
-                                    .foregroundColor(.gray)
-                                    .font(.title)
-                            })
-                    }
-                    .padding()
-                    
-                    Spacer()
-                }
-                
-                VStack {
-//                    CategoryTitleTextView(text: "Выберите \nкатегорию")
-//                        .multilineTextAlignment(.center)
-//                        .padding()
-                    
                     HStack {
                         NavigationLink(
                             destination: WantCategoryView(),
@@ -56,7 +34,7 @@ struct CategorySelectionView: View {
                             })
                         
                         NavigationLink(
-                            destination: EmptyView(),
+                            destination: HoodCategoryView(),
                             label: {
                                 ZStack {
                                     Color.white
@@ -73,7 +51,7 @@ struct CategorySelectionView: View {
                     
                     HStack {
                         NavigationLink(
-                            destination: EmptyView(),
+                            destination: FoodCategoryView(),
                             label: {
                                 ZStack {
                                     Color.white
@@ -97,7 +75,7 @@ struct CategorySelectionView: View {
                             })
                         
                         NavigationLink(
-                            destination: EmptyView(),
+                            destination: GeneralCategoryView(),
                             label: {
                                 ZStack {
                                     Color.white
@@ -105,8 +83,8 @@ struct CategorySelectionView: View {
                                         .frame(width: 150, height: 160)
                                         .cornerRadius(10)
                                         .shadow(radius: 5)
-                                        
-                                        CategoryTitleTextView(text: "Общее")
+                                    
+                                    CategoryTitleTextView(text: "Общее")
                                 }
                                 .padding(5)
                             })

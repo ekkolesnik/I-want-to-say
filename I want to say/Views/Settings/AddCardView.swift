@@ -7,86 +7,9 @@
 
 import SwiftUI
 
-class LocalFileManager {
-    
-    static let instance = LocalFileManager()
-    
-    func saveImage(image: UIImage, name: String) {
-        
-        guard let data = image.jpegData(compressionQuality: 1.0),
-            let path = getPathForImage(name: name) else {
-            print("Error getting data")
-            return
-        }
-        
-        do {
-            try data.write(to: path)
-            print("Success saving!")
-        } catch let error {
-            print(error.localizedDescription)
-        }
-        
-        let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        
-        print(directory)
-    }
-    
-    func getImage(name: String) -> UIImage? {
-        guard let path = getPathForImage(name: name)?.path,
-              FileManager.default.fileExists(atPath: path) else {
-            print("Error getting path")
-            return nil
-        }
-        return UIImage(contentsOfFile: path)
-    }
-    
-    func getPathForImage(name: String) -> URL? {
-        guard let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("\(name).jpg") else {
-            print("Error getting data")
-            return nil
-        }
-        return path
-    }
-}
-
-class FileManagerViewModel: ObservableObject {
-    
-    @Published var image: UIImage? = nil
-    let manager = LocalFileManager.instance
-    
-    func saveImage(image: UIImage?, name: String) {
-        guard let image = image else { return }
-        manager.saveImage(image: image, name: name)
-        
-        //Получаем массив из UserDefaults и записываем в него новое значение, после чего записываем новый массив в UserDefaults
-        var cardArray = [WantCategoryCard]()
-        //Получение
-        if let savedCardData = UserDefaults.standard.object(forKey: "wantArray") as? Data {
-            if let savedCard = try? JSONDecoder().decode([WantCategoryCard].self, from: savedCardData) {
-                for i in savedCard {
-                    cardArray.append(i)
-                }
-
-                //Запись нового значения в массив
-                let newCard = WantCategoryCard(id: UUID(), title: name, image: name)
-                cardArray.append(newCard)
-                
-                //Запись обнавлённого массива в UserDefaults
-                if let encodeCard = try? JSONEncoder().encode(cardArray) {
-                    UserDefaults.standard.set(encodeCard, forKey: "wantArray")
-                }
-                
-                print(cardArray)
-            }
-        }
-    }
-    
-    func getImafeFromFileManager(name: String) {
-        image = manager.getImage(name: name)
-    }
-}
-
 struct AddCardView: View {
+    
+    var category: String
     
     @StateObject var vm = FileManagerViewModel()
     
@@ -97,8 +20,6 @@ struct AddCardView: View {
     @State private var inputImage: UIImage?
     
     @Environment(\.presentationMode) var presentationMode
-    
-    let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
     
     var body: some View {
         ZStack {
@@ -168,7 +89,15 @@ struct AddCardView: View {
                     .padding(.bottom, 30)
                 
                 Button(action: {
+                    if category == "want" {
                     vm.saveImage(image: inputImage, name: title)
+                    } else if category == "food" {
+                        vm.saveImageFoodCategory(image: inputImage, name: title)
+                    } else if category == "hood" {
+                        vm.saveImageHoodCategory(image: inputImage, name: title)
+                    }
+                    
+                    presentationMode.wrappedValue.dismiss()
                 }, label: {
                     ZStack {
                         Color.white
@@ -202,6 +131,6 @@ struct AddCardView: View {
 
 struct AddCardView_Previews: PreviewProvider {
     static var previews: some View {
-        AddCardView()
+        AddCardView(category: "want")
     }
 }

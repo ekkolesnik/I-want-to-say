@@ -6,13 +6,14 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct WantCategoryView: View {
     
+    let synthesizer = AVSpeechSynthesizer()
+    
     @StateObject var vm = FileManagerViewModel()
-    
     @Environment(\.presentationMode) var presentationMode
-    
     @State private var cardArray = [WantCategoryCard]()
     
     var body: some View {
@@ -32,7 +33,7 @@ struct WantCategoryView: View {
                     })
                     Spacer()
                     NavigationLink(
-                        destination: SettingsView(),
+                        destination: SettingsWantCategoryView(),
                         label: {
                             Image(systemName: "gearshape")
                                 .foregroundColor(.gray)
@@ -44,15 +45,24 @@ struct WantCategoryView: View {
                 }
                 .padding()
                 
-                ZStack {
-                    Color.white
-                        .opacity(0.3)
-                        .frame(width: 200, height: 100)
-                        .cornerRadius(10)
-                        .shadow(radius: 5)
-                    
-                    CategoryTitleTextView(text: "Я хочу")
-                }
+                    Button(action: {
+                        let utterance = AVSpeechUtterance(string: "Я хочу")
+                        utterance.voice = AVSpeechSynthesisVoice(language: "ru-RU")
+                        utterance.rate = 0.4
+
+                        synthesizer.speak(utterance)
+                    }, label: {
+                        ZStack {
+                        Color.white
+                            .opacity(0.3)
+                            .frame(width: 200, height: 100)
+                            .cornerRadius(10)
+                            .shadow(radius: 5)
+                        
+                        CategoryTitleTextView(text: "Я хочу")
+                        }
+                    })
+                
                 
                 Color.white
                     .frame(width: 300, height: 2)
@@ -66,7 +76,16 @@ struct WantCategoryView: View {
                         GridItem(.fixed(110))
                     ], alignment: .center, spacing: nil, content: {
                         ForEach(cardArray, id: \.self) { card in
-                            BodyView(card: card)
+                            Button(action: {
+                                let utterance = AVSpeechUtterance(string: card.title)
+                                utterance.voice = AVSpeechSynthesisVoice(language: "ru-RU")
+                                utterance.rate = 0.4
+
+                                synthesizer.speak(utterance)
+                            }, label: {
+                                WantCategoryBodyView(card: card)
+                            })
+                            
                         }
                         .background(Color.white.opacity(0.3))
                         .cornerRadius(10)
@@ -125,13 +144,7 @@ struct WantCategoryView: View {
     }
 }
 
-struct WantCategoryView_Previews: PreviewProvider {
-    static var previews: some View {
-        WantCategoryView()
-    }
-}
-
-struct BodyView: View {
+struct WantCategoryBodyView: View {
     
     @StateObject var vm = FileManagerViewModel()
     
@@ -156,3 +169,11 @@ struct BodyView: View {
         })
     }
 }
+
+struct WantCategoryView_Previews: PreviewProvider {
+    static var previews: some View {
+        WantCategoryView()
+    }
+}
+
+
