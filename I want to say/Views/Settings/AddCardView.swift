@@ -95,6 +95,8 @@ struct AddCardView: View {
                         vm.saveImageFoodCategory(image: inputImage, name: title)
                     } else if category == "hood" {
                         vm.saveImageHoodCategory(image: inputImage, name: title)
+                    } else {
+                        vm.saveImageGeneralCategory(image: inputImage, name: title)
                     }
                     
                     presentationMode.wrappedValue.dismiss()

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8597C356268267480015B4DB /* SettingsGeneralCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8597C355268267480015B4DB /* SettingsGeneralCategoryView.swift */; };
 		85B2DBE026778C8E00A14C7B /* WantCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B2DBDF26778C8E00A14C7B /* WantCategoryView.swift */; };
 		85B2DBE226778CBF00A14C7B /* HoodCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B2DBE126778CBF00A14C7B /* HoodCategoryView.swift */; };
 		85B2DBE426778CED00A14C7B /* GeneralCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B2DBE326778CED00A14C7B /* GeneralCategoryView.swift */; };
@@ -46,6 +47,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8597C355268267480015B4DB /* SettingsGeneralCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsGeneralCategoryView.swift; sourceTree = "<group>"; };
 		85B2DBDF26778C8E00A14C7B /* WantCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WantCategoryView.swift; sourceTree = "<group>"; };
 		85B2DBE126778CBF00A14C7B /* HoodCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoodCategoryView.swift; sourceTree = "<group>"; };
 		85B2DBE326778CED00A14C7B /* GeneralCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralCategoryView.swift; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 				85B2DBEF2679242200A14C7B /* SettingsWantCategoryView.swift */,
 				85B2DBF92681066D00A14C7B /* SettingsFoodCategoryView.swift */,
 				85B2DC002682606700A14C7B /* SettingsHoodCategoryView.swift */,
+				8597C355268267480015B4DB /* SettingsGeneralCategoryView.swift */,
 				85B2DBF1267A434000A14C7B /* AddCardView.swift */,
 			);
 			path = Settings;
@@ -342,6 +345,7 @@
 				85B2DBE026778C8E00A14C7B /* WantCategoryView.swift in Sources */,
 				85B2DBF02679242200A14C7B /* SettingsWantCategoryView.swift in Sources */,
 				85B2DBF4267CDFDC00A14C7B /* ImagePicker.swift in Sources */,
+				8597C356268267480015B4DB /* SettingsGeneralCategoryView.swift in Sources */,
 				85B2DBE626778D0B00A14C7B /* FoodCategoryView.swift in Sources */,
 				85D5B7DF2676483C000C0A12 /* I_want_to_sayApp.swift in Sources */,
 				85B2DBF82680D43700A14C7B /* LocalFileManager.swift in Sources */,

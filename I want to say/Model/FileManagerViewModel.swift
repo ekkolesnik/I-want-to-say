@@ -94,6 +94,33 @@ class FileManagerViewModel: ObservableObject {
         }
     }
     
+    func saveImageGeneralCategory(image: UIImage?, name: String) {
+        guard let image = image else { return }
+        manager.saveImage(image: image, name: name)
+        
+        //Получаем массив из UserDefaults и записываем в него новое значение, после чего записываем новый массив в UserDefaults
+        var cardArray = [GeneralCategoryCard]()
+        //Получение
+        if let savedCardData = UserDefaults.standard.object(forKey: "generalArray") as? Data {
+            if let savedCard = try? JSONDecoder().decode([GeneralCategoryCard].self, from: savedCardData) {
+                for i in savedCard {
+                    cardArray.append(i)
+                }
+
+                //Запись нового значения в массив
+                let newCard = GeneralCategoryCard(id: UUID(), title: name, image: name)
+                cardArray.append(newCard)
+                
+                //Запись обнавлённого массива в UserDefaults
+                if let encodeCard = try? JSONEncoder().encode(cardArray) {
+                    UserDefaults.standard.set(encodeCard, forKey: "generalArray")
+                }
+                
+                print(cardArray)
+            }
+        }
+    }
+    
     func deleteImage(name: String) {
         manager.deleteImage(name: name)
     }
