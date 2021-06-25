@@ -15,6 +15,7 @@ struct FoodCategoryView: View {
     @StateObject var vm = FileManagerViewModel()
     @Environment(\.presentationMode) var presentationMode
     @State private var cardArray = [FoodCategoryCard]()
+    @State private var settingsToggle = false
     
     var body: some View {
         ZStack {
@@ -35,13 +36,16 @@ struct FoodCategoryView: View {
                         Spacer()
                         NavigationLink(
                             destination: SettingsFoodCategoryView(),
+                            isActive: $settingsToggle,
                             label: {
-                                Image(systemName: "gearshape")
-                                    .foregroundColor(.gray)
-                                    .font(.title)
-                            })
-                            .onAppear(perform: {
-                                cardArray.removeAll()
+                                Button(action: {
+                                    cardArray.removeAll()
+                                    settingsToggle.toggle()
+                                }, label: {
+                                    Image(systemName: "gearshape")
+                                        .foregroundColor(.gray)
+                                        .font(.title)
+                                })
                             })
                     }
                     .padding()
@@ -112,23 +116,17 @@ struct FoodCategoryView: View {
         let dataCards = UserDefaults.standard.object(forKey: "foodArray")
         
         if dataCards != nil {
-            print("111")
             if let savedCardData = UserDefaults.standard.object(forKey: "foodArray") as? Data {
                 if let savedCard = try? JSONDecoder().decode([FoodCategoryCard].self, from: savedCardData) {
-                    print(cardArray)
-                    print(savedCard)
                     for i in savedCard {
                         cardArray.append(i)
                     }
                 }
             }
         } else {
-            print("222")
             let importArray = [
                 FoodCategoryCard(id: UUID(), title: "Суп", image: "Суп")
             ]
-            
-            print(importArray)
             
             for i in importArray {
                 cardArray.append(i)
@@ -159,8 +157,7 @@ struct FoodCategoryBodyView: View {
                     .cornerRadius(5)
             }
             
-            Text(card.title)
-                .foregroundColor(.white)
+            CategoryCardTitleTextView(text: card.title)
         }
         .padding(5)
         .onAppear(perform: {

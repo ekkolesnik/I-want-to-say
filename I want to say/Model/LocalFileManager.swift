@@ -26,14 +26,6 @@ class LocalFileManager {
         } catch let error {
             print(error.localizedDescription)
         }
-        
-        //УДАЛИТЬ
-        
-        let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        
-        print(directory)
-        
-        //---------
     }
     
     func getImage(name: String) -> UIImage? {
@@ -47,10 +39,7 @@ class LocalFileManager {
     
     func deleteImage(name: String) {
         guard let path = getPathForImage(name: name),
-              FileManager.default.fileExists(atPath: path.path) else {
-            print("Error getting path")
-            return
-        }
+              FileManager.default.fileExists(atPath: path.path) else { return }
         do {
             try FileManager.default.removeItem(at: path)
             print("Sucessfully deleted")

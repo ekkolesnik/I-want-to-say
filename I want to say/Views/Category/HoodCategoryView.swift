@@ -15,6 +15,7 @@ struct HoodCategoryView: View {
     @StateObject var vm = FileManagerViewModel()
     @Environment(\.presentationMode) var presentationMode
     @State private var cardArray = [HoodCategoryCard]()
+    @State private var settingsToggle = false
     
     var body: some View {
         ZStack {
@@ -34,13 +35,16 @@ struct HoodCategoryView: View {
                         Spacer()
                         NavigationLink(
                             destination: SettingsHoodCategoryView(),
+                            isActive: $settingsToggle,
                             label: {
-                                Image(systemName: "gearshape")
-                                    .foregroundColor(.gray)
-                                    .font(.title)
-                            })
-                            .onAppear(perform: {
-                                cardArray.removeAll()
+                                Button(action: {
+                                    cardArray.removeAll()
+                                    settingsToggle.toggle()
+                                }, label: {
+                                    Image(systemName: "gearshape")
+                                        .foregroundColor(.gray)
+                                        .font(.title)
+                                })
                             })
                     }
                     .padding()
@@ -108,23 +112,17 @@ struct HoodCategoryView: View {
         let dataCards = UserDefaults.standard.object(forKey: "hoodArray")
         
         if dataCards != nil {
-            print("111")
             if let savedCardData = UserDefaults.standard.object(forKey: "hoodArray") as? Data {
                 if let savedCard = try? JSONDecoder().decode([HoodCategoryCard].self, from: savedCardData) {
-                    print(cardArray)
-                    print(savedCard)
                     for i in savedCard {
                         cardArray.append(i)
                     }
                 }
             }
         } else {
-            print("222")
             let importArray = [
                 HoodCategoryCard(id: UUID(), title: "рука", image: "рука")
             ]
-            
-            print(importArray)
             
             for i in importArray {
                 cardArray.append(i)
@@ -155,8 +153,7 @@ struct HoodCategoryBodyView: View {
                     .cornerRadius(5)
             }
             
-            Text(card.title)
-                .foregroundColor(.white)
+            CategoryCardTitleTextView(text: card.title)
         }
         .padding(5)
         .onAppear(perform: {

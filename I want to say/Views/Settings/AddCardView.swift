@@ -108,11 +108,7 @@ struct AddCardView: View {
                             .cornerRadius(10)
                             .shadow(radius: 5)
                         
-                        Text("Сохранить")
-                            .font(.title)
-                            .foregroundColor(.white)
-                            .bold()
-                            .opacity(0.8)
+                        SaveButtonTextView(text: "Сохранить")
                     }
                 })
                 

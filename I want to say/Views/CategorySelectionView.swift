@@ -17,6 +17,9 @@ struct CategorySelectionView: View {
                     .edgesIgnoringSafeArea(.all)
                 
                 VStack {
+                    CategoryTitleTextView(text: "Категория")
+                        .padding(.bottom, 10)
+                    
                     HStack {
                         NavigationLink(
                             destination: WantCategoryView(),

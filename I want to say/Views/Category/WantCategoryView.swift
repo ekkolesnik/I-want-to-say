@@ -15,6 +15,7 @@ struct WantCategoryView: View {
     @StateObject var vm = FileManagerViewModel()
     @Environment(\.presentationMode) var presentationMode
     @State private var cardArray = [WantCategoryCard]()
+    @State private var settingsToggle = false
     
     var body: some View {
         ZStack {
@@ -34,13 +35,16 @@ struct WantCategoryView: View {
                     Spacer()
                     NavigationLink(
                         destination: SettingsWantCategoryView(),
+                        isActive: $settingsToggle,
                         label: {
-                            Image(systemName: "gearshape")
-                                .foregroundColor(.gray)
-                                .font(.title)
-                        })
-                        .onAppear(perform: {
-                            cardArray.removeAll()
+                            Button(action: {
+                                cardArray.removeAll()
+                                settingsToggle.toggle()
+                            }, label: {
+                                Image(systemName: "gearshape")
+                                    .foregroundColor(.gray)
+                                    .font(.title)
+                            })
                         })
                 }
                 .padding()
@@ -110,26 +114,20 @@ struct WantCategoryView: View {
         let dataCards = UserDefaults.standard.object(forKey: "wantArray")
         
         if dataCards != nil {
-            print("111")
             if let savedCardData = UserDefaults.standard.object(forKey: "wantArray") as? Data {
-                if let savedUser = try? JSONDecoder().decode([WantCategoryCard].self, from: savedCardData) {
-                    print(cardArray)
-                    print(savedUser)
-                    for i in savedUser {
+                if let savedCard = try? JSONDecoder().decode([WantCategoryCard].self, from: savedCardData) {
+                    for i in savedCard {
                         cardArray.append(i)
                     }
                 }
             }
         } else {
-            print("222")
             let importArray = [
-                WantCategoryCard(id: UUID(), title: "Гулять", image: "1"),
-                WantCategoryCard(id: UUID(), title: "Купаться", image: "2"),
-                WantCategoryCard(id: UUID(), title: "Есть", image: "3"),
-                WantCategoryCard(id: UUID(), title: "Играть", image: "4")
+                WantCategoryCard(id: UUID(), title: "Гулять", image: "Гулять"),
+                WantCategoryCard(id: UUID(), title: "Купаться", image: "Купаться"),
+                WantCategoryCard(id: UUID(), title: "Есть", image: "Есть"),
+                WantCategoryCard(id: UUID(), title: "Играть", image: "Играть")
             ]
-            
-            print(importArray)
             
             for i in importArray {
                 cardArray.append(i)
@@ -160,8 +158,7 @@ struct WantCategoryBodyView: View {
                     .cornerRadius(5)
             }
             
-            Text(card.title)
-                .foregroundColor(.white)
+            CategoryCardTitleTextView(text: card.title)
         }
         .padding(5)
         .onAppear(perform: {

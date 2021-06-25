@@ -15,6 +15,7 @@ struct GeneralCategoryView: View {
     @StateObject var vm = FileManagerViewModel()
     @Environment(\.presentationMode) var presentationMode
     @State private var cardArray = [GeneralCategoryCard]()
+    @State private var settingsToggle = false
     
     var body: some View {
         ZStack {
@@ -35,13 +36,16 @@ struct GeneralCategoryView: View {
                         Spacer()
                         NavigationLink(
                             destination: SettingsGeneralCategoryView(),
+                            isActive: $settingsToggle,
                             label: {
-                                Image(systemName: "gearshape")
-                                    .foregroundColor(.gray)
-                                    .font(.title)
-                            })
-                            .onAppear(perform: {
-                                cardArray.removeAll()
+                                Button(action: {
+                                    cardArray.removeAll()
+                                    settingsToggle.toggle()
+                                }, label: {
+                                    Image(systemName: "gearshape")
+                                        .foregroundColor(.gray)
+                                        .font(.title)
+                                })
                             })
                     }
                     .padding()
@@ -90,29 +94,23 @@ struct GeneralCategoryView: View {
         let dataCards = UserDefaults.standard.object(forKey: "generalArray")
         
         if dataCards != nil {
-            print("111")
             if let savedCardData = UserDefaults.standard.object(forKey: "generalArray") as? Data {
-                if let savedUser = try? JSONDecoder().decode([GeneralCategoryCard].self, from: savedCardData) {
-                    print(cardArray)
-                    print(savedUser)
-                    for i in savedUser {
+                if let savedCard = try? JSONDecoder().decode([GeneralCategoryCard].self, from: savedCardData) {
+                    for i in savedCard {
                         cardArray.append(i)
                     }
                 }
             }
         } else {
-            print("222")
             let importArray = [
                 GeneralCategoryCard(id: UUID(), title: "да", image: "да"),
                 GeneralCategoryCard(id: UUID(), title: "нет", image: "нет")
             ]
             
-            print(importArray)
-            
             for i in importArray {
                 cardArray.append(i)
                 let image = UIImage(named: i.image)
-                vm.saveImage(image: image, name: i.title)
+                vm.saveImageGeneralCategory(image: image, name: i.title)
             }
             
             if let encodeCard = try? JSONEncoder().encode(importArray) {
@@ -138,8 +136,7 @@ struct GeneralCategoryBodyView: View {
                     .cornerRadius(5)
             }
             
-            Text(card.title)
-                .foregroundColor(.white)
+            CategoryCardTitleTextView(text: card.title)
         }
         .padding(5)
         .onAppear(perform: {

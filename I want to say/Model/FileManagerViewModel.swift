@@ -34,8 +34,6 @@ class FileManagerViewModel: ObservableObject {
                 if let encodeCard = try? JSONEncoder().encode(cardArray) {
                     UserDefaults.standard.set(encodeCard, forKey: "wantArray")
                 }
-                
-                print(cardArray)
             }
         }
     }
@@ -61,8 +59,6 @@ class FileManagerViewModel: ObservableObject {
                 if let encodeCard = try? JSONEncoder().encode(cardArray) {
                     UserDefaults.standard.set(encodeCard, forKey: "foodArray")
                 }
-                
-                print(cardArray)
             }
         }
     }
@@ -88,8 +84,6 @@ class FileManagerViewModel: ObservableObject {
                 if let encodeCard = try? JSONEncoder().encode(cardArray) {
                     UserDefaults.standard.set(encodeCard, forKey: "hoodArray")
                 }
-                
-                print(cardArray)
             }
         }
     }
@@ -115,8 +109,6 @@ class FileManagerViewModel: ObservableObject {
                 if let encodeCard = try? JSONEncoder().encode(cardArray) {
                     UserDefaults.standard.set(encodeCard, forKey: "generalArray")
                 }
-                
-                print(cardArray)
             }
         }
     }

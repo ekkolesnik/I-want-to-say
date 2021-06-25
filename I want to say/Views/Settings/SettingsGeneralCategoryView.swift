@@ -36,9 +36,6 @@ struct SettingsGeneralCategoryView: View {
                                 .foregroundColor(.gray)
                                 .font(.title)
                         })
-                        .onAppear(perform: {
-                            cardArray.removeAll()
-                        })
                         
                         Spacer()
                         
@@ -62,7 +59,7 @@ struct SettingsGeneralCategoryView: View {
                 List {
                     ForEach(cardArray, id: \.self) { card in
                         NavigationLink(
-                            destination: EmptyView(),
+                            destination: EditCardView(cardId: card.id, categoryCard: "general", titleName: card.title, imageName: card.image),
                             label: {
                                 SettingsGeneralBodyView(card: card)
                                 
@@ -101,8 +98,6 @@ struct SettingsGeneralCategoryView: View {
     func getArray() {
         if let savedCardData = UserDefaults.standard.object(forKey: "generalArray") as? Data {
             if let savedCard = try? JSONDecoder().decode([GeneralCategoryCard].self, from: savedCardData) {
-                print(cardArray)
-                print(savedCard)
                 for i in savedCard {
                     cardArray.append(i)
                 }
@@ -141,10 +136,7 @@ struct SettingsGeneralBodyView: View {
                 vm.getImafeFromFileManager(name: card.title)
             })
             
-            Text(card.title)
-                .font(.title2)
-                .foregroundColor(.white)
-                .bold()
+            SettingsListCardTitleTextView(text: card.title)
             
             Spacer()
         }

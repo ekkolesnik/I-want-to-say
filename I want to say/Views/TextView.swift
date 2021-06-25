@@ -7,9 +7,14 @@
 
 import SwiftUI
 
-struct TextView: View {
+struct SettingsListCardTitleTextView: View {
+    var text: String
+    
     var body: some View {
-        Text("Hello, World!")
+        Text(text)
+            .font(.title2)
+            .foregroundColor(.white)
+            .bold()
     }
 }
 
@@ -25,6 +30,27 @@ struct CategoryTitleTextView: View {
     }
 }
 
+struct CategoryCardTitleTextView: View {
+    var text: String
+    
+    var body: some View {
+        Text(text)
+            .foregroundColor(.white)
+    }
+}
+
+struct SaveButtonTextView: View {
+    var text: String
+    
+    var body: some View {
+        Text(text)
+            .font(.title)
+            .foregroundColor(.white)
+            .bold()
+            .opacity(0.8)
+    }
+}
+
 struct TextView_Previews: PreviewProvider {
     static var previews: some View {
         ZStack {
@@ -33,7 +59,9 @@ struct TextView_Previews: PreviewProvider {
             
             VStack {
                 CategoryTitleTextView(text: "Название")
-                TextView()
+                SettingsListCardTitleTextView(text: "Название")
+                CategoryCardTitleTextView(text: "Название")
+                SaveButtonTextView(text: "Сохранить")
             }
         }
         

@@ -10,9 +10,7 @@ import SwiftUI
 struct SettingsWantCategoryView: View {
     
     @Environment(\.presentationMode) var presentationMode
-    
     @StateObject var vm = FileManagerViewModel()
-    
     @State private var cardArray = [WantCategoryCard]()
     
     init() {
@@ -35,9 +33,6 @@ struct SettingsWantCategoryView: View {
                             Image(systemName: "chevron.left")
                                 .foregroundColor(.gray)
                                 .font(.title)
-                        })
-                        .onAppear(perform: {
-                            cardArray.removeAll()
                         })
                         
                         Spacer()
@@ -62,7 +57,7 @@ struct SettingsWantCategoryView: View {
                 List {
                     ForEach(cardArray, id: \.self) { card in
                         NavigationLink(
-                            destination: EmptyView(),
+                            destination: EditCardView(cardId: card.id, categoryCard: "want", titleName: card.title, imageName: card.image),
                             label: {
                                 SettingsBodyView(card: card)
                                 
@@ -101,8 +96,6 @@ struct SettingsWantCategoryView: View {
     func getArray() {
         if let savedCardData = UserDefaults.standard.object(forKey: "wantArray") as? Data {
             if let savedCard = try? JSONDecoder().decode([WantCategoryCard].self, from: savedCardData) {
-                print(cardArray)
-                print(savedCard)
                 for i in savedCard {
                     cardArray.append(i)
                 }
@@ -141,10 +134,7 @@ struct SettingsBodyView: View {
                 vm.getImafeFromFileManager(name: card.title)
             })
             
-            Text(card.title)
-                .font(.title2)
-                .foregroundColor(.white)
-                .bold()
+            SettingsListCardTitleTextView(text: card.title)
             
             Spacer()
         }

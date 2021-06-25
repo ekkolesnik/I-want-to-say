@@ -36,9 +36,6 @@ struct SettingsHoodCategoryView: View {
                                 .foregroundColor(.gray)
                                 .font(.title)
                         })
-                        .onAppear(perform: {
-                            cardArray.removeAll()
-                        })
                         
                         Spacer()
                         
@@ -62,7 +59,7 @@ struct SettingsHoodCategoryView: View {
                 List {
                     ForEach(cardArray, id: \.self) { card in
                         NavigationLink(
-                            destination: EmptyView(),
+                            destination: EditCardView(cardId: card.id, categoryCard: "hood", titleName: card.title, imageName: card.image),
                             label: {
                                 SettingsHoodBodyView(card: card)
                                 
@@ -101,8 +98,6 @@ struct SettingsHoodCategoryView: View {
     func getArray() {
         if let savedCardData = UserDefaults.standard.object(forKey: "hoodArray") as? Data {
             if let savedCard = try? JSONDecoder().decode([HoodCategoryCard].self, from: savedCardData) {
-                print(cardArray)
-                print(savedCard)
                 for i in savedCard {
                     cardArray.append(i)
                 }
@@ -141,10 +136,7 @@ struct SettingsHoodBodyView: View {
                 vm.getImafeFromFileManager(name: card.title)
             })
             
-            Text(card.title)
-                .font(.title2)
-                .foregroundColor(.white)
-                .bold()
+            SettingsListCardTitleTextView(text: card.title)
             
             Spacer()
         }
