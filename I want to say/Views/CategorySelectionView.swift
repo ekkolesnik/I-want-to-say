@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct CategorySelectionView: View {
+    
     var body: some View {
         
         NavigationView {
@@ -16,25 +17,12 @@ struct ContentView: View {
                     .edgesIgnoringSafeArea(.all)
                 
                 VStack {
-                    HStack {
-                        Spacer()
-                        NavigationLink(
-                            destination: EmptyView(),
-                            label: {
-                                Image(systemName: "gearshape")
-                                    .foregroundColor(.gray)
-                                    .font(.title)
-                            })
-                    }
-                    .padding()
+                    CategoryTitleTextView(text: "Категория")
+                        .padding(.bottom, 10)
                     
-                    Spacer()
-                }
-                
-                VStack {
                     HStack {
                         NavigationLink(
-                            destination: EmptyView(),
+                            destination: WantCategoryView(),
                             label: {
                                 ZStack {
                                     Color.white
@@ -43,17 +31,13 @@ struct ContentView: View {
                                         .cornerRadius(10)
                                         .shadow(radius: 5)
                                     
-                                    Text("Хочу")
-                                        .bold()
-                                        .font(.largeTitle)
-                                        .foregroundColor(.white)
-                                        .opacity(0.8)
+                                    CategoryTitleTextView(text: "Хочу")
                                 }
                                 .padding(5)
                             })
                         
                         NavigationLink(
-                            destination: EmptyView(),
+                            destination: HoodCategoryView(),
                             label: {
                                 ZStack {
                                     Color.white
@@ -62,11 +46,7 @@ struct ContentView: View {
                                         .cornerRadius(10)
                                         .shadow(radius: 5)
                                     
-                                    Text("Болит")
-                                        .bold()
-                                        .font(.largeTitle)
-                                        .foregroundColor(.white)
-                                        .opacity(0.8)
+                                    CategoryTitleTextView(text: "Болит")
                                 }
                                 .padding(5)
                             })
@@ -74,7 +54,7 @@ struct ContentView: View {
                     
                     HStack {
                         NavigationLink(
-                            destination: EmptyView(),
+                            destination: FoodCategoryView(),
                             label: {
                                 ZStack {
                                     Color.white
@@ -84,7 +64,7 @@ struct ContentView: View {
                                         .shadow(radius: 5)
                                     
                                     VStack(spacing: 7) {
-                                        Image("1")
+                                        Image("0")
                                             .resizable()
                                             .scaledToFill()
                                             .frame(width: 140, height: 150)
@@ -98,7 +78,7 @@ struct ContentView: View {
                             })
                         
                         NavigationLink(
-                            destination: EmptyView(),
+                            destination: GeneralCategoryView(),
                             label: {
                                 ZStack {
                                     Color.white
@@ -106,12 +86,8 @@ struct ContentView: View {
                                         .frame(width: 150, height: 160)
                                         .cornerRadius(10)
                                         .shadow(radius: 5)
-                                        
-                                        Text("Общее")
-                                            .bold()
-                                            .font(.largeTitle)
-                                            .foregroundColor(.white)
-                                            .opacity(0.8)
+                                    
+                                    CategoryTitleTextView(text: "Общее")
                                 }
                                 .padding(5)
                             })
@@ -120,11 +96,12 @@ struct ContentView: View {
             }
             .navigationBarHidden(true)
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        CategorySelectionView()
     }
 }
