@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct AddCardView: View {
-    
     var category: String
     
     @StateObject var vm = FileManagerViewModel()
@@ -16,12 +15,16 @@ struct AddCardView: View {
     @State private var image: Image?
     @State private var title = ""
     
+    @State private var value: CGFloat = 0
+    
     @State private var showingImagePicker = false
     @State private var inputImage: UIImage?
+    @State private var resizedImage: UIImage?
     
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
+        
         ZStack {
             RadialGradient(gradient: Gradient(colors: [Color(#colorLiteral(red: 0.001840596669, green: 0.8078940511, blue: 0.9998741746, alpha: 1)), Color(#colorLiteral(red: 0.007844023407, green: 5.293237791e-06, blue: 0.1411535442, alpha: 1))]), center: .center, startRadius: 50, endRadius: 700)
                 .edgesIgnoringSafeArea(.all)
@@ -90,7 +93,7 @@ struct AddCardView: View {
                 
                 Button(action: {
                     if category == "want" {
-                    vm.saveImage(image: inputImage, name: title)
+                        vm.saveImage(image: inputImage, name: title)
                     } else if category == "food" {
                         vm.saveImageFoodCategory(image: inputImage, name: title)
                     } else if category == "hood" {
@@ -114,6 +117,20 @@ struct AddCardView: View {
                 
                 Spacer()
             }
+            .offset(y: -self.value)
+            .animation(.spring())
+            .onAppear(perform: {
+                NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { (noti) in
+                    
+                    self.value = 100
+                }
+                
+                NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { (noti) in
+                    
+                    self.value = 0
+                }
+            })
+            
         }
         .navigationBarHidden(true)
         .sheet(isPresented: $showingImagePicker, onDismiss: loadImage, content: {

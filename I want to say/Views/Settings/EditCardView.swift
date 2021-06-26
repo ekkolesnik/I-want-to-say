@@ -14,6 +14,8 @@ struct EditCardView: View {
     var titleName: String
     var imageName: String
     
+    @State private var value: CGFloat = 0
+    
     @StateObject var vm = FileManagerViewModel()
     
     @State private var image: Image?
@@ -98,7 +100,9 @@ struct EditCardView: View {
                 Button(action: {
                     
                     //удаление фото из дирректории
-                    vm.deleteImage(name: titleName)
+                    DispatchQueue.main.async {
+                        vm.deleteImage(name: titleName)
+                    }
                     
                     if categoryCard == "want" {
                         
@@ -119,7 +123,6 @@ struct EditCardView: View {
                                 newCardArray.append(i)
                             }
                         }
-                        
                         vm.saveImage(image: inputImage, name: title)
                         
                         // добавления новой записи в массив с записью в базу
@@ -219,7 +222,6 @@ struct EditCardView: View {
                         if let encodeCard = try? JSONEncoder().encode(newCardArray) {
                             UserDefaults.standard.set(encodeCard, forKey: "generalArray")
                         }
-                        
                     }
                     
                     presentationMode.wrappedValue.dismiss()
@@ -241,6 +243,19 @@ struct EditCardView: View {
                 
                 Spacer()
             }
+            .offset(y: -self.value)
+            .animation(.spring())
+            .onAppear(perform: {
+                NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { (noti) in
+                    
+                    self.value = 100
+                }
+                
+                NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { (noti) in
+                    
+                    self.value = 0
+                }
+            })
         }
         .navigationBarHidden(true)
         .sheet(isPresented: $showingImagePicker, onDismiss: loadImage, content: {

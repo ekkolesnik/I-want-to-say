@@ -13,9 +13,8 @@ class LocalFileManager {
     static let instance = LocalFileManager()
     
     func saveImage(image: UIImage, name: String) {
-        
         guard let data = image.jpegData(compressionQuality: 0.5),
-            let path = getPathForImage(name: name) else {
+              let path = self.getPathForImage(name: name) else {
             print("Error getting data")
             return
         }
