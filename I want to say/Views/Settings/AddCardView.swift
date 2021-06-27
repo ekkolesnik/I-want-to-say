@@ -17,6 +17,8 @@ struct AddCardView: View {
     
     @State private var value: CGFloat = 0
     
+    @State private var changeAction = false
+    @State private var showingAlert = false
     @State private var showingImagePicker = false
     @State private var inputImage: UIImage?
     @State private var resizedImage: UIImage?
@@ -92,17 +94,21 @@ struct AddCardView: View {
                     .padding(.bottom, 30)
                 
                 Button(action: {
-                    if category == "want" {
-                        vm.saveImage(image: inputImage, name: title)
-                    } else if category == "food" {
-                        vm.saveImageFoodCategory(image: inputImage, name: title)
-                    } else if category == "hood" {
-                        vm.saveImageHoodCategory(image: inputImage, name: title)
+                    if changeAction == false || title == "" {
+                        showingAlert = true
                     } else {
-                        vm.saveImageGeneralCategory(image: inputImage, name: title)
+                        if category == "want" {
+                            vm.saveImage(image: inputImage, name: title)
+                        } else if category == "food" {
+                            vm.saveImageFoodCategory(image: inputImage, name: title)
+                        } else if category == "hood" {
+                            vm.saveImageHoodCategory(image: inputImage, name: title)
+                        } else {
+                            vm.saveImageGeneralCategory(image: inputImage, name: title)
+                        }
+                        
+                        presentationMode.wrappedValue.dismiss()
                     }
-                    
-                    presentationMode.wrappedValue.dismiss()
                 }, label: {
                     ZStack {
                         Color.white
@@ -113,6 +119,9 @@ struct AddCardView: View {
                         
                         SaveButtonTextView(text: "Сохранить")
                     }
+                })
+                .alert(isPresented: $showingAlert, content: {
+                    Alert(title: Text("Ошибка"), message: Text("Не выбрана картинка, либо не введено название"), dismissButton: .default(Text("OK")))
                 })
                 
                 Spacer()
@@ -141,6 +150,7 @@ struct AddCardView: View {
     func loadImage() {
         guard let inputImage = inputImage else { return }
         image = Image(uiImage: inputImage)
+        changeAction = true
     }
 }
 

@@ -13,6 +13,11 @@ class FileManagerViewModel: ObservableObject {
     @Published var image: UIImage? = nil
     let manager = LocalFileManager.instance
     
+    func saveEditImage(image: UIImage?, name: String) {
+        guard let image = image else { return }
+        manager.saveEditImage(image: image, name: name)
+    }
+    
     func saveImage(image: UIImage?, name: String) {
         guard let image = image else { return }
         manager.saveImage(image: image, name: name)
