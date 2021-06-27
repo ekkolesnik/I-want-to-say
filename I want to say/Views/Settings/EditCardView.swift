@@ -99,132 +99,134 @@ struct EditCardView: View {
                 
                 Button(action: {
                     
-                    //удаление фото из дирректории
-                    DispatchQueue.main.async {
-                        vm.deleteImage(name: titleName)
-                    }
+                        //удаление фото из дирректории
+                        DispatchQueue.main.async {
+                            vm.deleteImage(name: titleName)
+                        }
+                        
+                        if categoryCard == "want" {
+                            
+                            var cardsArray = [WantCategoryCard]()
+                            var newCardArray = [WantCategoryCard]()
+                            
+                            
+                            // добавить функцию получение текущего массива и удаления из него записи
+                            if let savedCardData = UserDefaults.standard.object(forKey: "wantArray") as? Data {
+                                if let savedUser = try? JSONDecoder().decode([WantCategoryCard].self, from: savedCardData) {
+                                    for i in savedUser {
+                                        cardsArray.append(i)
+                                    }
+                                }
+                            }
+                            
+                            for i in cardsArray {
+                                if i.id != cardId {
+                                    newCardArray.append(i)
+                                }
+                            }
+                            
+                            vm.saveEditImage(image: inputImage, name: title)
+                            
+                            // добавления новой записи в массив с записью в UserDefaults
+                            let newWantCategoryCard = WantCategoryCard(id: UUID(), title: title, image: title)
+                            newCardArray.append(newWantCategoryCard)
+
+                            if let encodeCard = try? JSONEncoder().encode(newCardArray) {
+                                UserDefaults.standard.set(encodeCard, forKey: "wantArray")
+                            }
+                            
+                        } else if categoryCard == "food" {
+                            
+                            var cardArray = [FoodCategoryCard]()
+                            var newCardArray = [FoodCategoryCard]()
+                            
+                            // добавить функцию получение текущего массива и удаления из него записи
+                            if let savedCardData = UserDefaults.standard.object(forKey: "foodArray") as? Data {
+                                if let savedUser = try? JSONDecoder().decode([FoodCategoryCard].self, from: savedCardData) {
+                                    for i in savedUser {
+                                        cardArray.append(i)
+                                    }
+                                }
+                            }
+                            
+                            for i in cardArray {
+                                if i.id != cardId {
+                                    newCardArray.append(i)
+                                }
+                            }
+                            
+                            vm.saveEditImage(image: inputImage, name: title)
+                            
+                            // добавления новой записи в массив с записью в базу
+                            let newFoodCategoryCard = FoodCategoryCard(id: UUID(), title: title, image: title)
+                            newCardArray.append(newFoodCategoryCard)
+                            
+                            if let encodeCard = try? JSONEncoder().encode(newCardArray) {
+                                UserDefaults.standard.set(encodeCard, forKey: "foodArray")
+                            }
+                            
+                        } else if categoryCard == "hood" {
+                            
+                            var cardArray = [HoodCategoryCard]()
+                            var newCardArray = [HoodCategoryCard]()
+                            
+                            // добавить функцию получение текущего массива и удаления из него записи
+                            if let savedCardData = UserDefaults.standard.object(forKey: "hoodArray") as? Data {
+                                if let savedUser = try? JSONDecoder().decode([HoodCategoryCard].self, from: savedCardData) {
+                                    for i in savedUser {
+                                        cardArray.append(i)
+                                    }
+                                }
+                            }
+                            
+                            for i in cardArray {
+                                if i.id != cardId {
+                                    newCardArray.append(i)
+                                }
+                            }
+                            
+                            vm.saveEditImage(image: inputImage, name: title)
+                            
+                            // добавления новой записи в массив с записью в базу
+                            let newHoodCategoryCard = HoodCategoryCard(id: UUID(), title: title, image: title)
+                            newCardArray.append(newHoodCategoryCard)
+                            
+                            if let encodeCard = try? JSONEncoder().encode(newCardArray) {
+                                UserDefaults.standard.set(encodeCard, forKey: "hoodArray")
+                            }
+                            
+                        } else {
+                            
+                            var generalCardArray = [GeneralCategoryCard]()
+                            var newCardArray = [GeneralCategoryCard]()
+                            
+                            // добавить функцию получение текущего массива и удаления из него записи
+                            if let savedCardData = UserDefaults.standard.object(forKey: "generalArray") as? Data {
+                                if let savedUser = try? JSONDecoder().decode([GeneralCategoryCard].self, from: savedCardData) {
+                                    for i in savedUser {
+                                        generalCardArray.append(i)
+                                    }
+                                }
+                            }
+                            
+                            for i in generalCardArray {
+                                if i.id != cardId {
+                                    newCardArray.append(i)
+                                }
+                            }
+                            
+                            vm.saveEditImage(image: inputImage, name: title)
+                            
+                            // добавления новой записи в массив с записью в базу
+                            let newGeneralCategoryCard = GeneralCategoryCard(id: UUID(), title: title, image: title)
+                            newCardArray.append(newGeneralCategoryCard)
+                            
+                            if let encodeCard = try? JSONEncoder().encode(newCardArray) {
+                                UserDefaults.standard.set(encodeCard, forKey: "generalArray")
+                            }
+                        }
+                        presentationMode.wrappedValue.dismiss()
                     
-                    if categoryCard == "want" {
-                        
-                        var cardArray = [WantCategoryCard]()
-                        var newCardArray = [WantCategoryCard]()
-                        
-                        // добавить функцию получение текущего массива и удаления из него записи
-                        if let savedCardData = UserDefaults.standard.object(forKey: "wantArray") as? Data {
-                            if let savedUser = try? JSONDecoder().decode([WantCategoryCard].self, from: savedCardData) {
-                                for i in savedUser {
-                                    cardArray.append(i)
-                                }
-                            }
-                        }
-                        
-                        for i in cardArray {
-                            if i.id != cardId {
-                                newCardArray.append(i)
-                            }
-                        }
-                        vm.saveImage(image: inputImage, name: title)
-                        
-                        // добавления новой записи в массив с записью в базу
-                        let newWantCategoryCard = WantCategoryCard(id: UUID(), title: title, image: title)
-                        newCardArray.append(newWantCategoryCard)
-                        
-                        if let encodeCard = try? JSONEncoder().encode(newCardArray) {
-                            UserDefaults.standard.set(encodeCard, forKey: "wantArray")
-                        }
-                        
-                    } else if categoryCard == "food" {
-                        
-                        var cardArray = [FoodCategoryCard]()
-                        var newCardArray = [FoodCategoryCard]()
-                        
-                        // добавить функцию получение текущего массива и удаления из него записи
-                        if let savedCardData = UserDefaults.standard.object(forKey: "foodArray") as? Data {
-                            if let savedUser = try? JSONDecoder().decode([FoodCategoryCard].self, from: savedCardData) {
-                                for i in savedUser {
-                                    cardArray.append(i)
-                                }
-                            }
-                        }
-                        
-                        for i in cardArray {
-                            if i.id != cardId {
-                                newCardArray.append(i)
-                            }
-                        }
-                        
-                        vm.saveImageFoodCategory(image: inputImage, name: title)
-                        
-                        // добавления новой записи в массив с записью в базу
-                        let newFoodCategoryCard = FoodCategoryCard(id: UUID(), title: title, image: title)
-                        newCardArray.append(newFoodCategoryCard)
-                        
-                        if let encodeCard = try? JSONEncoder().encode(newCardArray) {
-                            UserDefaults.standard.set(encodeCard, forKey: "foodArray")
-                        }
-                        
-                    } else if categoryCard == "hood" {
-                        
-                        var cardArray = [HoodCategoryCard]()
-                        var newCardArray = [HoodCategoryCard]()
-                        
-                        // добавить функцию получение текущего массива и удаления из него записи
-                        if let savedCardData = UserDefaults.standard.object(forKey: "hoodArray") as? Data {
-                            if let savedUser = try? JSONDecoder().decode([HoodCategoryCard].self, from: savedCardData) {
-                                for i in savedUser {
-                                    cardArray.append(i)
-                                }
-                            }
-                        }
-                        
-                        for i in cardArray {
-                            if i.id != cardId {
-                                newCardArray.append(i)
-                            }
-                        }
-                        
-                        vm.saveImageHoodCategory(image: inputImage, name: title)
-                        
-                        // добавления новой записи в массив с записью в базу
-                        let newHoodCategoryCard = HoodCategoryCard(id: UUID(), title: title, image: title)
-                        newCardArray.append(newHoodCategoryCard)
-                        
-                        if let encodeCard = try? JSONEncoder().encode(newCardArray) {
-                            UserDefaults.standard.set(encodeCard, forKey: "hoodArray")
-                        }
-                        
-                    } else {
-                        
-                        var generalCardArray = [GeneralCategoryCard]()
-                        var newCardArray = [GeneralCategoryCard]()
-                        
-                        // добавить функцию получение текущего массива и удаления из него записи
-                        if let savedCardData = UserDefaults.standard.object(forKey: "generalArray") as? Data {
-                            if let savedUser = try? JSONDecoder().decode([GeneralCategoryCard].self, from: savedCardData) {
-                                for i in savedUser {
-                                    generalCardArray.append(i)
-                                }
-                            }
-                        }
-                        
-                        for i in generalCardArray {
-                            if i.id != cardId {
-                                newCardArray.append(i)
-                            }
-                        }
-                        
-                        vm.saveImageGeneralCategory(image: inputImage, name: title)
-                        
-                        // добавления новой записи в массив с записью в базу
-                        let newGeneralCategoryCard = GeneralCategoryCard(id: UUID(), title: title, image: title)
-                        newCardArray.append(newGeneralCategoryCard)
-                        
-                        if let encodeCard = try? JSONEncoder().encode(newCardArray) {
-                            UserDefaults.standard.set(encodeCard, forKey: "generalArray")
-                        }
-                    }
-                    
-                    presentationMode.wrappedValue.dismiss()
                 }, label: {
                     ZStack {
                         Color.white

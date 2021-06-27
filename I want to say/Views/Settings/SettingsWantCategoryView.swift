@@ -65,6 +65,7 @@ struct SettingsWantCategoryView: View {
                     }
                     .onDelete(perform: self.deleteRow)
                     .listRowBackground(Color.clear)
+                    
                 }
                 
                 Spacer()

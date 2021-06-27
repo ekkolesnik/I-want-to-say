@@ -54,4 +54,21 @@ class LocalFileManager {
         }
         return path
     }
+    
+    func saveEditImage(image: UIImage, name: String) {
+        guard let data = image.jpegData(compressionQuality: 0.5),
+              let path = self.getPathForImage(name: name) else {
+            print("Error getting data")
+            return
+        }
+        
+        DispatchQueue.main.async {
+            do {
+                try data.write(to: path)
+                print("Success saving!")
+            } catch let error {
+                print(error.localizedDescription)
+            }
+        }
+    }
 }
