@@ -72,7 +72,9 @@ struct SettingsFoodCategoryView: View {
             .navigationBarHidden(true)
         }
         .onAppear(perform: {
-            getArray()
+            DispatchQueue.main.async {
+                getArray()
+            }
         })
     }
     

@@ -60,12 +60,12 @@ struct SettingsWantCategoryView: View {
                             destination: EditCardView(cardId: card.id, categoryCard: "want", titleName: card.title, imageName: card.image),
                             label: {
                                 SettingsBodyView(card: card)
-                                
+
                             })
                     }
                     .onDelete(perform: self.deleteRow)
                     .listRowBackground(Color.clear)
-                    
+
                 }
                 
                 Spacer()
@@ -73,7 +73,9 @@ struct SettingsWantCategoryView: View {
             .navigationBarHidden(true)
         }
         .onAppear(perform: {
-            getArray()
+            DispatchQueue.main.async {
+                getArray()
+            }
         })
     }
     
